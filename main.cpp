@@ -1,14 +1,16 @@
 #include "Parser.hpp"
+#include "Polynome.hpp"
 
 int main(int ac, char **av) {
     
     if (ac < 2) return (std::cerr << "Not Arg Enough!" << std::endl, 1);
 
     Parser parser(av[1]);
+    polynome poly;
 
     try {
         parser.splitTerms();
-        parser.parseTerms();
+        parser.parseTerms(poly);
     } catch (std::exception &e) {
         std::cerr << e.what() << std::endl;
     }

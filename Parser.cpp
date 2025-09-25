@@ -3,7 +3,7 @@
 Parser::Parser() {
 }
 
-Parser::Parser(std::string p) : polynome(p), a(0), b(0), c(0){
+Parser::Parser(std::string p) : polynome(p){
 }
 
 Parser::~Parser() {
@@ -12,62 +12,62 @@ Parser::~Parser() {
 void Parser::splitTerms() {
     // remove spaces
     polynome.erase(std::remove(polynome.begin(), polynome.end(), ' '), polynome.end());
-    std::cout << "the polynome : " << polynome << std::endl;
+    std::cout << "the polynome : " << this->polynome << std::endl;
 
     // tokenize the RS and LS
-    size_t polynomeSize = polynome.size();
+    size_t polynomeSize = this->polynome.size();
     size_t j = 0;
     size_t i = 0;
     bool isTerm = false;
-    size_t equalPos = polynome.find('=');
+    size_t equalPos = this->polynome.find('=');
     if (equalPos == std::string::npos) return;
     for (; i < equalPos; i++) {
-        if ((polynome[i] == '-' || polynome[i] == '+') && i) {
-            ls.push_back(polynome.substr(j, i - j));
+        if ((this->polynome[i] == '-' || this->polynome[i] == '+') && i) {
+            ls.push_back(this->polynome.substr(j, i - j));
             j = i;
         }
 
         // define Term && polynome degree
-        if (!isTerm && std::isalpha(static_cast<unsigned char>(polynome[i]))) {
-            term = polynome[i];
+        if (!isTerm && std::isalpha(static_cast<unsigned char>(this->polynome[i]))) {
+            term = this->polynome[i];
             isTerm = true;
         }
     }
-    ls.push_back(polynome.substr(j, i - j));
+    ls.push_back(this->polynome.substr(j, i - j));
 
     j = equalPos + 1;
     i = equalPos + 1;
 
     for (; i < polynomeSize; i++) {
-        if ((polynome[i] == '-' || polynome[i] == '+') && i != (equalPos + 1)) {
-            rs.push_back(polynome.substr(j, i - j));
+        if ((this->polynome[i] == '-' || this->polynome[i] == '+') && i != (equalPos + 1)) {
+            rs.push_back(this->polynome.substr(j, i - j));
             j = i;
         }
 
         // define Term && polynome degree
-        if (!isTerm && std::isalpha(static_cast<unsigned char>(polynome[i]))) {
-            term = polynome[i];
+        if (!isTerm && std::isalpha(static_cast<unsigned char>(this->polynome[i]))) {
+            term = this->polynome[i];
             isTerm = true;
         }
     }
-    rs.push_back(polynome.substr(j, i - j));
+    rs.push_back(this->polynome.substr(j, i - j));
 }
 
-void Parser::matchRegex(std::vector<std::string> &vec) {
+void Parser::matchRegexAndDefinePolyDegree(std::vector<std::string> &vec) {
 
     std::regex numberRe(R"(^[+-]?\d+(\.\d+)?$)");
-    std::string pattern = std::string("(^([+-]?)(?:(\\d+(?:\\.\\d+)?)(?:\\*)?)?([") + term + std::string("])(?:\\^(\\d+))?$)");
+    std::string pattern = std::string("(^([+-]?)(?:(\\d+(?:\\.\\d+)?)(?:\\*)?)?([") + this->term + std::string("])(?:\\^(\\d+))?$)");
     std::regex termRe(pattern);
 
     for (size_t i = 0; i < vec.size(); i++) {
 
-        size_t termPos = vec[i].find(term);
+        size_t termPos = vec[i].find(this->term);
         std::string coefOfTermStr;
 
         // don't contain Term=X
         if (termPos == std::string::npos) {
             if (!std::regex_match(vec[i], numberRe)) throw std::runtime_error("Parsing Err : " + vec[i]);
-            c += std::stod(vec[i]);
+            this->termExpByCoef[0] += std::stod(vec[i]);
         }
 
         // contain Term=X
@@ -86,42 +86,42 @@ void Parser::matchRegex(std::vector<std::string> &vec) {
             if (vec[i][termPos + 1] == '^') {
                 int exponent = std::stoi(vec[i].substr(termPos + 2));
                 if (exponent > 2) throw std::runtime_error("Invalid input: degree > 2");
-                if (exponent == 0) c += coefOfTerm;
-                else termExpByCoef[exponent] += coefOfTerm;
+                this->termExpByCoef[exponent] += coefOfTerm;
             }
-            else termExpByCoef[1] += coefOfTerm;
+            else this->termExpByCoef[1] += coefOfTerm;
             
         }
     }
+
+    poly.setCoefficients(this->termExpByCoef[2], this->termExpByCoef[1], this->termExpByCoef[0]);
 }
 
-void Parser::parseTerms() {
+void Parser::parseTerms(Polynome &poly) {
 
     // merge LS and RS and normalize
-    normalizedPoly = ls;
+    poly.setVecToNormalizedPoly(ls);
     for (size_t i = 0; i < rs.size(); i++) {
         if (rs[i][0] == '-' || rs[i][0] == '+') {
-            if (rs[i][0] == '-') normalizedPoly.push_back("+" + rs[i].erase(0, 1));
-            else normalizedPoly.push_back("-" + rs[i].erase(0, 1));
+            if (rs[i][0] == '-') poly.setNormalizedPolyValue("+" + rs[i].erase(0, 1));
+            else poly.setNormalizedPolyValue("-" + rs[i].erase(0, 1));
         }
         else {
-            normalizedPoly.push_back("-" + rs[i]);
+            poly.setNormalizedPolyValue("-" + rs[i]);
         }
     }
 
     // parse normalizedPoly and determine a,b,c and poly degree
-    matchRegex(normalizedPoly);
+    matchRegexAndDefinePolyDegree(poly.getNormalizedPoly());
 
 
 
     std::cout << "the normalizedPoly : ";
+    std::vector<std::string> normalizedPoly = poly.getNormalizedPoly();
     for (size_t i = 0; i < normalizedPoly.size(); i++)
         std::cout << normalizedPoly[i];
     std::cout << "=0" << std::endl; 
     std::cout << "============" << std::endl;
-    std::cout << "a is :" << c << std::endl;
-    std::cout << "============" << std::endl;
-    for (const auto& pair : termExpByCoef) {
-        std::cout << "Key: " << pair.first << ", Value: " << pair.second << std::endl;
-    }
+    std::cout << "a is :" << poly.getCoefficientA() << std::endl;
+    std::cout << "b is :" << poly.getCoefficientB() << std::endl;
+    std::cout << "c is :" << poly.getCoefficientC() << std::endl;
 }

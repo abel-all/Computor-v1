@@ -8,6 +8,9 @@
 #include <vector>
 #include <map>
 #include <regex>
+#include "Polynome.hpp"
+
+class Polynome;
 
 class Parser {
     private:
@@ -15,18 +18,14 @@ class Parser {
         char                        term;
         std::vector<std::string>    rs;
         std::vector<std::string>    ls;
-        std::vector<std::string>    normalizedPoly;
         std::map<int, double>       termExpByCoef;
-        double                      a;
-        double                      b;
-        double                      c;
     public:
         Parser();
         Parser(std::string p);
         ~Parser();
         void splitTerms();
-        void parseTerms();
-        void matchRegex(std::vector<std::string> &vec);
+        void parseTerms(Polynome &poly);
+        void matchRegexAndDefinePolyDegree(std::vector<std::string> &vec);
 };
 
 #endif
