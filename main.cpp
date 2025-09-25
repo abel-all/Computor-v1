@@ -9,8 +9,8 @@ int main(int ac, char **av) {
     try {
         parser.splitTerms();
         parser.parseTerms();
-    } catch (const std::string& errorMessage) {
-        std::cerr << errorMessage << std::endl;
+    } catch (std::exception &e) {
+        std::cerr << e.what() << std::endl;
     }
 
 }
