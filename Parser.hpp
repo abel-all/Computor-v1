@@ -1,6 +1,4 @@
 #pragma once
-#ifndef __PARSER_H__
-#define __PARSER_H__
 
 #include <string>
 #include <iostream>
@@ -10,7 +8,7 @@
 #include <regex>
 #include "Polynome.hpp"
 
-class Polynome;
+// class Polynome;/
 
 class Parser {
     private:
@@ -27,5 +25,3 @@ class Parser {
         void parseTerms(Polynome &poly);
         void matchRegexAndDefinePolyDegree(std::vector<std::string> &vec);
 };
-
-#endif

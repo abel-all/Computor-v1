@@ -20,7 +20,7 @@ void Parser::splitTerms() {
     size_t i = 0;
     bool isTerm = false;
     size_t equalPos = this->polynome.find('=');
-    if (equalPos == std::string::npos) return;
+    if (equalPos == std::string::npos) throw std::runtime_error("Parsing Err : Equal not exist");
     for (; i < equalPos; i++) {
         if ((this->polynome[i] == '-' || this->polynome[i] == '+') && i) {
             ls.push_back(this->polynome.substr(j, i - j));
@@ -93,11 +93,10 @@ void Parser::matchRegexAndDefinePolyDegree(std::vector<std::string> &vec) {
         }
     }
 
-    poly.setCoefficients(this->termExpByCoef[2], this->termExpByCoef[1], this->termExpByCoef[0]);
 }
 
 void Parser::parseTerms(Polynome &poly) {
-
+    
     // merge LS and RS and normalize
     poly.setVecToNormalizedPoly(ls);
     for (size_t i = 0; i < rs.size(); i++) {
@@ -109,11 +108,11 @@ void Parser::parseTerms(Polynome &poly) {
             poly.setNormalizedPolyValue("-" + rs[i]);
         }
     }
-
+    
     // parse normalizedPoly and determine a,b,c and poly degree
     matchRegexAndDefinePolyDegree(poly.getNormalizedPoly());
-
-
+    
+    poly.setCoefficients(this->termExpByCoef[2], this->termExpByCoef[1], this->termExpByCoef[0]);
 
     std::cout << "the normalizedPoly : ";
     std::vector<std::string> normalizedPoly = poly.getNormalizedPoly();

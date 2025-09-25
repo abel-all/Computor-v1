@@ -1,16 +1,16 @@
 #include "Polynome.hpp"
 
-Polynome::polynome() {
+Polynome::Polynome() {
 
 }
 
-Polynome::~polynome() {
+Polynome::~Polynome() {
 
 }
 
 void Polynome::setCoefficients(double CoefA, double CoefB, double CoefC) {
     this->a = CoefA;
-    this->b = Coefb;
+    this->b = CoefB;
     this->c = CoefC;
 }
 
@@ -34,6 +34,6 @@ void Polynome::setVecToNormalizedPoly(std::vector<std::string> vec) {
     this->normalizedPoly = vec;
 }
 
-std::vector<std::string> Polynome::getNormalizedPoly() {
+std::vector<std::string> &Polynome::getNormalizedPoly() {
     return this->normalizedPoly;
 }
