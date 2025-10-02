@@ -119,8 +119,4 @@ void Parser::parseTerms(Polynome &poly) {
     for (size_t i = 0; i < normalizedPoly.size(); i++)
         std::cout << normalizedPoly[i];
     std::cout << "=0" << std::endl; 
-    std::cout << "============" << std::endl;
-    std::cout << "a is :" << poly.getCoefficientA() << std::endl;
-    std::cout << "b is :" << poly.getCoefficientB() << std::endl;
-    std::cout << "c is :" << poly.getCoefficientC() << std::endl;
 }

@@ -8,8 +8,6 @@
 #include <regex>
 #include "Polynome.hpp"
 
-// class Polynome;/
-
 class Parser {
     private:
         std::string                 polynome;

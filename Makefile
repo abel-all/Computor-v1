@@ -4,9 +4,9 @@ NAME	=	computor
 
 CFLAGS	=	-Wall -Wextra -Werror
 
-HEADERS	=	Parser.hpp Polynome.hpp
+HEADERS	=	Parser.hpp Polynome.hpp Solver.hpp
 
-SRCS	= 	Parser.cpp Polynome.cpp main.cpp
+SRCS	= 	Parser.cpp Polynome.cpp Solver.cpp main.cpp
 
 OBJS	=	$(SRCS:.cpp=.o)
 
