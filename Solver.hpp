@@ -4,6 +4,7 @@
 #include <iostream>
 #include <cmath>
 #include <complex>
+#include <numeric>
 #include "Polynome.hpp"
 
 class Solver {

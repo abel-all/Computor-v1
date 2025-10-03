@@ -6,6 +6,10 @@ Solver::Solver(): x1(0), x2(0), typeOfSolution(""){
 Solver::~Solver() {
 }
 
+long long gcd_ll(long long x, long long y) {
+    return std::gcd(std::llabs(x), std::llabs(y));
+}
+
 void Solver::solveAndPrint(Polynome &polynome) {
     std::cout << "============" << std::endl;
     std::cout << "A is :" << polynome.getCoefficientA() << std::endl;
@@ -21,33 +25,57 @@ void Solver::solveAndPrint(Polynome &polynome) {
 
         double discriminant = std::pow(b, 2) - 4*a*c;
         double discriminantSqrt = std::sqrt(discriminant);
-        std::cout << "============" << std::endl;
-        std::cout << "discriminant is :" << discriminant << std::endl;
+        double denominator = 2 * a;
 
         if (discriminant > 0) {
-            this->x1 = (b+discriminantSqrt)*-1/(2*a);
-            this->x2 = (discriminantSqrt-b)/(2*a);
+            this->x1 = (b+discriminantSqrt)*-1/denominator;
+            this->x2 = (discriminantSqrt-b)/denominator;
             this->typeOfSolution = "Bigger than zero";
             std::cout << "============" << std::endl;
             std::cout << "X1 is :" << this->x1 << std::endl;
             std::cout << "X2 is :" << this->x2 << std::endl;
         } else if (discriminant == 0) {
-            this->x1 = -b/(2*a);
+            this->x1 = -b/denominator;
             this->typeOfSolution = "Equal to zero";
             std::cout << "============" << std::endl;
             std::cout << "X1 is :" << this->x1 << std::endl;
         } else {
             discriminantSqrt = std::sqrt(std::abs(discriminant));
-            // using namespace std::literals::complex_literals;
-            std::complex<double> z1((-b/(2*a)), (discriminantSqrt/(2*a))*-1);
-            std::complex<double> z2((-b/(2*a)), (discriminantSqrt/(2*a)));
+            long long gcd_one = gcd_ll(b, denominator);
+            long long gcd_two = gcd_ll(discriminantSqrt, denominator);
+            
             this->typeOfSolution = "Younger than zero";
             std::cout << "============" << std::endl;
-            std::cout << "Z1 is :" << z1 << std::endl;
-            std::cout << "Z2 is :" << z2 << std::endl;
+            if (denominator < 0) {
+                std::cout << "Z1 is :" << -(b/gcd_one) << "/" << (denominator/gcd_one) 
+                << " - " << (discriminantSqrt/gcd_two) << "i" << "/" << std::abs(denominator/gcd_two) << std::endl;
+                std::cout << "Z2 is :" << -(b/gcd_one) << "/" << (denominator/gcd_one)  
+                << " + " << (discriminantSqrt/gcd_two) << "i" << "/" << std::abs(denominator/gcd_two) << std::endl;
+            } else {
+                std::cout << "Z1 is :" << -(b/gcd_one) << "/" << (denominator/gcd_one) 
+                << " + " << (discriminantSqrt/gcd_two) << "i" << "/" << (denominator/gcd_two) << std::endl;
+                std::cout << "Z2 is :" << -(b/gcd_one) << "/" << (denominator/gcd_one)  
+                << " - " << (discriminantSqrt/gcd_two) << "i" << "/" << (denominator/gcd_two) << std::endl;
+            }
         }
 
     } else {
+        if (b != 0) {
+
+            double x = -c/b;
+            std::cout << "============" << std::endl;
+            std::cout << "x is :" << x << std::endl;
+
+
+        } else {
+            if (c == 0) {
+                std::cout << "============" << std::endl;
+                std::cout << "Any real number is a solution." << std::endl;
+            } else {
+                std::cout << "============" << std::endl;
+                std::cout << "No solution." << std::endl;
+            }
+        }
 
     }
 
