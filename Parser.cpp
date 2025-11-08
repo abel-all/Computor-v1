@@ -1,6 +1,7 @@
 #include "Parser.hpp"
 
 Parser::Parser() {
+    this->exponent = 0;
 }
 
 Parser::Parser(std::string p) : polynome(p){
@@ -12,7 +13,6 @@ Parser::~Parser() {
 void Parser::splitTerms() {
     // remove spaces
     polynome.erase(std::remove(polynome.begin(), polynome.end(), ' '), polynome.end());
-    std::cout << "the polynome : " << this->polynome << std::endl;
 
     // tokenize the RS and LS
     size_t polynomeSize = this->polynome.size();
@@ -58,6 +58,7 @@ void Parser::matchRegexAndDefinePolyDegree(std::vector<std::string> &vec) {
     std::regex numberRe(R"(^[+-]?\d+(\.\d+)?$)");
     std::string pattern = std::string("(^([+-]?)(?:(\\d+(?:\\.\\d+)?)(?:\\*)?)?([") + this->term + std::string("])(?:\\^(\\d+))?$)");
     std::regex termRe(pattern);
+    std::size_t exponent;
 
     for (size_t i = 0; i < vec.size(); i++) {
 
@@ -84,12 +85,14 @@ void Parser::matchRegexAndDefinePolyDegree(std::vector<std::string> &vec) {
             double coefOfTerm = std::stod(coefOfTermStr);
 
             if (vec[i][termPos + 1] == '^') {
-                int exponent = std::stoi(vec[i].substr(termPos + 2));
+                exponent = std::stoi(vec[i].substr(termPos + 2));
                 if (exponent > 2) throw std::runtime_error("Invalid input: degree > 2");
                 this->termExpByCoef[exponent] += coefOfTerm;
             }
             else this->termExpByCoef[1] += coefOfTerm;
-            
+
+            // define polynome degree
+            this->exponent = std::max(this->exponent, exponent);
         }
     }
 
@@ -114,9 +117,4 @@ void Parser::parseTerms(Polynome &poly) {
     
     poly.setCoefficients(this->termExpByCoef[2], this->termExpByCoef[1], this->termExpByCoef[0]);
 
-    std::cout << "the normalizedPoly : ";
-    std::vector<std::string> normalizedPoly = poly.getNormalizedPoly();
-    for (size_t i = 0; i < normalizedPoly.size(); i++)
-        std::cout << normalizedPoly[i];
-    std::cout << "=0" << std::endl; 
 }

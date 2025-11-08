@@ -4,6 +4,7 @@
 #include <iostream>
 #include <algorithm>
 #include <vector>
+#include <map>
 
 class Polynome {
     private:
@@ -21,4 +22,5 @@ class Polynome {
         void setNormalizedPolyValue(std::string str);
         void setVecToNormalizedPoly(std::vector<std::string> vec);
         std::vector<std::string> &getNormalizedPoly();
+        std::string getReducedForm() const;
 };

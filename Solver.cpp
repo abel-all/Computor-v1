@@ -11,15 +11,19 @@ long long gcd_ll(long long x, long long y) {
 }
 
 void Solver::solveAndPrint(Polynome &polynome) {
-    std::cout << "============" << std::endl;
-    std::cout << "A is :" << polynome.getCoefficientA() << std::endl;
-    std::cout << "B is :" << polynome.getCoefficientB() << std::endl;
-    std::cout << "C is :" << polynome.getCoefficientC() << std::endl;
 
-    // solve the polynome:
     double a = polynome.getCoefficientA();
     double b = polynome.getCoefficientB();
     double c = polynome.getCoefficientC();
+
+    // print the reduced form:
+    std::cout << "Reduced form: " ;
+    std::cout << polynome.getReducedForm() << std::endl;
+
+
+    // std::cout << "Polynomial degree: " << polynome.getDegree() << std::endl;
+
+    // solve the polynome:
 
     if (a != 0) {
 
