@@ -12,6 +12,7 @@ class Polynome {
         double                      a;
         double                      b;
         double                      c;
+        size_t                      degree;
     public:
         Polynome();
         ~Polynome();
@@ -23,4 +24,7 @@ class Polynome {
         void setVecToNormalizedPoly(std::vector<std::string> vec);
         std::vector<std::string> &getNormalizedPoly();
         std::string getReducedForm() const;
+        std::string formatDouble(const std::string& str) const;
+        void setDegree(size_t deg);
+        size_t getDegree() const;
 };

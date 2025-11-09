@@ -38,6 +38,21 @@ std::vector<std::string> &Polynome::getNormalizedPoly() {
     return this->normalizedPoly;
 }
 
+std::string Polynome::formatDouble(const std::string& str) const {
+    size_t dotPos = str.find('.');
+    if (dotPos != std::string::npos) {
+        size_t endPos = str.size() - 1;
+        while (endPos > dotPos && str[endPos] == '0') {
+            endPos--;
+        }
+        if (endPos == dotPos) {
+            endPos--;
+        }
+        return str.substr(0, endPos + 1);
+    }
+    return str;
+}
+
 std::string Polynome::getReducedForm() const {
     std::string reducedForm;
     std::map<size_t, std::string> termMap;
@@ -48,25 +63,53 @@ std::string Polynome::getReducedForm() const {
 
     for (size_t i = 0; i < normalizedPoly.size(); i++) {
 
-        std::cout << "normalizedPoly[" << i << "] = " << normalizedPoly[i] << std::endl;
-        size_t xPos = normalizedPoly[i].find("X");
+        size_t xPos = normalizedPoly[i].find("X^");
         if (xPos != std::string::npos) {
             size_t degree = std::stoi(normalizedPoly[i].substr(xPos + 2));
             termMap[degree] = normalizedPoly[i].substr(xPos);
         }
-        // reducedForm += normalizedPoly[i];
-        // if (i != normalizedPoly.size() - 1)
-        //     reducedForm += " ";
+        else {
+            size_t xPos = normalizedPoly[i].find("X");
+            if (xPos != std::string::npos) {
+                termMap[1] = normalizedPoly[i].substr(xPos);
+            }
+            else {
+                termMap[0] = normalizedPoly[i];
+            }
+        }
     }
 
     for (int deg = 2; deg >= 0; deg--) {
+        // std::cout << "-------------" << std::endl;
+        // std::cout << "deg: " << deg << std::endl;
+        // std::cout << "termMap[deg]: " << termMap[deg] << std::endl;
+        // std::cout << "-------------" << std::endl;
         if (termMap.find(deg) != termMap.end()) {
-            if (!reducedForm.empty() && termMap[deg][0] != '-') {
+            // if (!reducedForm.empty() && termMap[deg][0] != '-') {
+            //     reducedForm += " + ";
+            // }
+            // if (!reducedForm.empty() && coefByDegree[deg][0] != '-') {
+            //     reducedForm += " + ";
+            // }
+            // if (coefByDegree[deg][0] == '-') {
+            //     reducedForm += " - ";
+            //     coefByDegree[deg].erase(0, 1);
+            // }
+            if (!reducedForm.empty() && coefByDegree[deg] >= 0) {
                 reducedForm += " + ";
             }
-            reducedForm += std::to_string(coefByDegree[deg]) + termMap[deg];
+            reducedForm += formatDouble(std::to_string(coefByDegree[deg])) + " * " +  termMap[deg];
         }
     }
+
     reducedForm += " = 0";
     return reducedForm;
+}
+
+void Polynome::setDegree(size_t deg) {
+    this->degree = deg;
+}
+
+size_t Polynome::getDegree() const {
+    return this->degree;
 }

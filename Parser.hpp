@@ -15,8 +15,8 @@ class Parser {
         std::vector<std::string>    rs;
         std::vector<std::string>    ls;
         std::map<int, double>       termExpByCoef;
-        std::size_t                 exponent;
         std::string                 reducedForm;
+        size_t                      exponent;
     public:
         Parser();
         Parser(std::string p);
