@@ -34,29 +34,30 @@ void Parser::splitTerms() {
         }
     }
     ls.push_back(this->polynome.substr(j, i - j));
-
+    
     j = equalPos + 1;
     i = equalPos + 1;
-
+    
     for (; i < polynomeSize; i++) {
         if ((this->polynome[i] == '-' || this->polynome[i] == '+') && i != (equalPos + 1)) {
             rs.push_back(this->polynome.substr(j, i - j));
             j = i;
         }
-
+        
         // define Term && polynome degree
         if (!isTerm && std::isalpha(static_cast<unsigned char>(this->polynome[i]))) {
             term = this->polynome[i];
             isTerm = true;
         }
     }
-    rs.push_back(this->polynome.substr(j, i - j));
+    std::string lastTerm = this->polynome.substr(j, i - j);
+    if (lastTerm != "0") rs.push_back(lastTerm);
 }
 
 void Parser::matchRegexAndDefinePolyDegree(std::vector<std::string> &vec) {
 
     std::regex numberRe(R"(^[+-]?\d+(\.\d+)?$)");
-    std::string pattern = std::string("(^([+-]?)(?:(\\d+(?:\\.\\d+)?)(?:\\*)?)?([") + this->term + std::string("])(?:\\^(\\d+))?$)");
+    std::string pattern = std::string("^([+-]?\\d+(?:\\.\\d+)?)\\*([") + this->term + std::string("])\\^(\\d+)$");
     std::regex termRe(pattern);
     size_t exponentLocal;
 
