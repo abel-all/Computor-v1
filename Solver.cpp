@@ -59,15 +59,31 @@ void Solver::solveAndPrint(Polynome &polynome) {
             
             std::cout << "Discriminant is strictly negative, the two complex solutions are:" << std::endl;
             if (denominator < 0) {
-                std::cout << -(b/gcd_one) << "/" << (denominator/gcd_one) 
-                << " - " << (discriminantSqrt/gcd_two) << "i" << "/" << std::abs(denominator/gcd_two) << std::endl;
-                std::cout << -(b/gcd_one) << "/" << (denominator/gcd_one)  
-                << " + " << (discriminantSqrt/gcd_two) << "i" << "/" << std::abs(denominator/gcd_two) << std::endl;
+                if ((denominator/gcd_one) < 0) {
+                    std::cout << (b/gcd_one) << "/" << -(denominator/gcd_one) 
+                    << " - " << (discriminantSqrt/gcd_two) << "i" << "/" << std::abs(denominator/gcd_two) << std::endl;
+                    std::cout << (b/gcd_one) << "/" << -(denominator/gcd_one)  
+                    << " + " << (discriminantSqrt/gcd_two) << "i" << "/" << std::abs(denominator/gcd_two) << std::endl;
+                }
+                else {
+                    std::cout << -(b/gcd_one) << "/" << (denominator/gcd_one) 
+                    << " - " << (discriminantSqrt/gcd_two) << "i" << "/" << std::abs(denominator/gcd_two) << std::endl;
+                    std::cout << -(b/gcd_one) << "/" << (denominator/gcd_one)  
+                    << " + " << (discriminantSqrt/gcd_two) << "i" << "/" << std::abs(denominator/gcd_two) << std::endl;
+                }
             } else {
-                std::cout << -(b/gcd_one) << "/" << (denominator/gcd_one) 
-                << " + " << (discriminantSqrt/gcd_two) << "i" << "/" << (denominator/gcd_two) << std::endl;
-                std::cout << -(b/gcd_one) << "/" << (denominator/gcd_one)  
-                << " - " << (discriminantSqrt/gcd_two) << "i" << "/" << (denominator/gcd_two) << std::endl;
+                if ((denominator/gcd_one) < 0) {
+                    std::cout << (b/gcd_one) << "/" << -(denominator/gcd_one) 
+                    << " + " << (discriminantSqrt/gcd_two) << "i" << "/" << (denominator/gcd_two) << std::endl;
+                    std::cout << (b/gcd_one) << "/" << -(denominator/gcd_one)  
+                    << " - " << (discriminantSqrt/gcd_two) << "i" << "/" << (denominator/gcd_two) << std::endl;
+                }
+                else {
+                    std::cout << -(b/gcd_one) << "/" << (denominator/gcd_one) 
+                    << " + " << (discriminantSqrt/gcd_two) << "i" << "/" << (denominator/gcd_two) << std::endl;
+                    std::cout << -(b/gcd_one) << "/" << (denominator/gcd_one)  
+                    << " - " << (discriminantSqrt/gcd_two) << "i" << "/" << (denominator/gcd_two) << std::endl;
+                }
             }
         }
 

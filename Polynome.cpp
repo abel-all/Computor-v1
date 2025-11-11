@@ -80,23 +80,13 @@ std::string Polynome::getReducedForm() const {
     }
 
     for (int deg = 2; deg >= 0; deg--) {
-        // std::cout << "-------------" << std::endl;
-        // std::cout << "deg: " << deg << std::endl;
-        // std::cout << "termMap[deg]: " << termMap[deg] << std::endl;
-        // std::cout << "-------------" << std::endl;
         if (termMap.find(deg) != termMap.end()) {
-            // if (!reducedForm.empty() && termMap[deg][0] != '-') {
-            //     reducedForm += " + ";
-            // }
-            // if (!reducedForm.empty() && coefByDegree[deg][0] != '-') {
-            //     reducedForm += " + ";
-            // }
-            // if (coefByDegree[deg][0] == '-') {
-            //     reducedForm += " - ";
-            //     coefByDegree[deg].erase(0, 1);
-            // }
             if (!reducedForm.empty() && coefByDegree[deg] >= 0) {
                 reducedForm += " + ";
+            }
+            else if (!reducedForm.empty() && coefByDegree[deg] < 0) {
+                reducedForm += " - ";
+                coefByDegree[deg] = -coefByDegree[deg];
             }
             reducedForm += formatDouble(std::to_string(coefByDegree[deg])) + " * " +  termMap[deg];
         }
